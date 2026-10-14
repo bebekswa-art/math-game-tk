@@ -78,6 +78,7 @@ class Game1Hitung extends BaseGame {
     countDisplay.textContent = `${this.applesInBasket}/${soal.answer}`;
 
     AudioManager.play('drop');
+    source.remove();
 
     if (this.applesInBasket === soal.answer) {
       AudioManager.play('correct');
