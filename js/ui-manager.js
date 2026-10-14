@@ -18,46 +18,48 @@ const UIManager = (() => {
     },
 
     levelSelectScreen(state) {
-      const levelCards = state.levels.map(level => {
-        const isUnlocked = state.totalScore >= level.unlockThreshold;
-        const levelScore = state.levelScores?.[level.id] || 0;
-        
-        return `
-          <div class="level-card ${isUnlocked ? 'unlocked' : 'locked'}">
-            ${!isUnlocked ? '<div class="lock-icon">🔒</div>' : ''}
-            <div class="level-header">
-              <h3>Level ${level.id}</h3>
-              <span class="difficulty difficulty-${level.difficulty}">${level.difficulty}</span>
-            </div>
-            <p class="level-name">${level.name}</p>
-            <p class="level-score">Skor: ${levelScore}</p>
-            <button 
-              class="btn btn-secondary level-btn" 
-              onclick="window.GameApp.startGame(${level.id})"
-              ${!isUnlocked ? 'disabled' : ''}
-            >
-              ${isUnlocked ? 'Mainkan' : 'Terkunci'}
-            </button>
-          </div>
-        `;
-      }).join('');
+       const levelCards = state.levels.map(level => {
+         const isUnlocked = state.totalScore >= level.unlockThreshold;
+         const levelScore = state.levelScores?.[level.id] || 0;
+         
+         return `
+           <div class="level-card ${isUnlocked ? 'unlocked' : 'locked'}">
+             ${!isUnlocked ? '<div class="lock-icon">🔒</div>' : ''}
+             <div class="level-header">
+               <h3>Level ${level.id}</h3>
+               <span class="difficulty difficulty-${level.difficulty}">${level.difficulty}</span>
+             </div>
+             <p class="level-name">${level.name}</p>
+             <p class="level-score">Skor: ${levelScore}</p>
+             <button 
+               class="btn btn-secondary level-btn" 
+               onclick="window.GameApp.startGame(${level.id})"
+               ${!isUnlocked ? 'disabled' : ''}
+             >
+               ${isUnlocked ? 'Mainkan' : 'Terkunci'}
+             </button>
+           </div>
+         `;
+       }).join('');
 
-      return `
-        <div class="screen screen-level-select">
-          <div class="level-select-header">
-            <h1>Pilih Level</h1>
-            <p class="player-name">${state.childName}</p>
-            <p class="total-score">Total Skor: <span>${state.totalScore}</span></p>
-          </div>
-          <div class="levels-grid">
-            ${levelCards}
-          </div>
-          <button class="btn btn-primary" id="btn-back-home">
-            Kembali
-          </button>
-        </div>
-      `;
-    },
+       const displayName = state.childName || 'Pemain';
+
+       return `
+         <div class="screen screen-level-select">
+           <div class="level-select-header">
+             <h1>Pilih Level</h1>
+             <p class="player-name">${displayName}</p>
+             <p class="total-score">Total Skor: <span>${state.totalScore}</span></p>
+           </div>
+           <div class="levels-grid">
+             ${levelCards}
+           </div>
+           <button class="btn btn-primary" id="btn-back-home">
+             Kembali
+           </button>
+         </div>
+       `;
+     },
 
     gameScreen(state) {
       const currentLevel = state.levels.find(l => l.id === state.currentLevel);
@@ -173,7 +175,7 @@ const UIManager = (() => {
           window.GameApp.showScreen('levels');
         });
       }
-    } else if (screenName === 'levelSelect') {
+    } else if (screenName === 'levelSelect' || screenName === 'levels') {
       const backBtn = document.getElementById('btn-back-home');
       if (backBtn) {
         backBtn.addEventListener('click', () => {

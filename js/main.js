@@ -81,6 +81,18 @@ window.GameApp = {
     this.state.levelScores[levelId] = levelScore;
     
     this.state.updateScore?.(levelScore);
+  },
+
+  showResults(correct, points, stars) {
+    if (!this.state || !this.state.currentGameState) return;
+    
+    this.state.currentGameState.lastResult = {
+      isCorrect: correct,
+      points: points,
+      stars: stars
+    };
+    
+    this.showScreen('results');
   }
 };
 

@@ -178,11 +178,11 @@
 
 .difficulty-medium {
   background-color: var(--color-caution);
-  color: #333333;
+  color: var(--color-text);
 }
 
 .difficulty-hard {
-  background-color: #FF6B6B;
+  background-color: var(--color-error);
   color: #ffffff;
 }
 
@@ -416,7 +416,7 @@
 
 .results-feedback.incorrect {
   background-color: rgba(255, 107, 107, 0.2);
-  border: 2px solid #FF6B6B;
+  border: 2px solid var(--color-error);
 }
 
 .results-feedback h1 {
@@ -429,7 +429,7 @@
 }
 
 .results-feedback.incorrect h1 {
-  color: #FF6B6B;
+  color: var(--color-error);
 }
 
 .feedback-message {
