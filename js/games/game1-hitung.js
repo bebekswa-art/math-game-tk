@@ -56,7 +56,7 @@ class Game1Hitung extends BaseGame {
 
   setupDragDrop(soal) {
     const apples = this.container.querySelectorAll('.apple');
-    const basket = this.container.getElementById('basket-drop');
+    const basket = this.container.querySelector('#basket-drop');
 
     apples.forEach((apple, idx) => {
       DragEngine.setDragData(apple, { 
