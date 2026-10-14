@@ -1,5 +1,6 @@
 window.GameApp = {
   state: null,
+  currentGame: null,
 
   async init() {
     try {
@@ -10,6 +11,7 @@ window.GameApp = {
       this.state.levels = levelsData.levels;
       this.state.levelScores = this.state.levelScores || {};
       
+      DragEngine.init();
       this.showScreen('title');
     } catch (error) {
       console.error('Failed to initialize GameApp:', error);
@@ -24,6 +26,46 @@ window.GameApp = {
 
     this.state.currentScreen = name;
     UIManager.render(name, this.state);
+
+    if (name === 'game') {
+      this.initializeGame();
+    }
+  },
+
+  async initializeGame() {
+    if (!this.state || !this.state.currentLevel) return;
+
+    const level = this.state.levels.find(l => l.id === this.state.currentLevel);
+    if (!level) return;
+
+    const gameArea = document.getElementById('game-area');
+    if (!gameArea) return;
+
+    let GameClass = null;
+    switch (level.game) {
+      case 'hitung':
+        GameClass = Game1Hitung;
+        break;
+      case 'bunga':
+        GameClass = Game2Bunga;
+        break;
+      case 'matching':
+        GameClass = Game3Matching;
+        break;
+      case 'puzzle':
+        GameClass = Game4Puzzle;
+        break;
+      case 'challenge':
+        GameClass = Game5Challenge;
+        break;
+      default:
+        console.error('Unknown game type:', level.game);
+        return;
+    }
+
+    this.currentGame = new GameClass(level.id);
+    await this.currentGame.init(gameArea, level);
+    await this.currentGame.start();
   },
 
   startGame(levelId) {
