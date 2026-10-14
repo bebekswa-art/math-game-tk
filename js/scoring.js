@@ -40,7 +40,7 @@ const Scoring = (() => {
     async submitAnswer(levelId, isCorrect, responseTimeMs) {
       const state = GameState.load();
       
-      previousUnlockedLevels = await GameState.getUnlockedLevels();
+      previousUnlockedLevels = await state.getUnlockedLevels();
       
       const points = this.calculatePoints(isCorrect, currentStreak, responseTimeMs);
 
@@ -57,7 +57,7 @@ const Scoring = (() => {
 
       await state.updateScore(points);
 
-      const newUnlockedLevels = await GameState.getUnlockedLevels();
+      const newUnlockedLevels = await state.getUnlockedLevels();
       const newlyUnlocked = newUnlockedLevels.filter(
         id => !previousUnlockedLevels.includes(id)
       );
