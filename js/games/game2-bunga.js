@@ -11,12 +11,12 @@ class Game2Bunga extends BaseGame {
     for (let i = 0; i < count; i++) {
       const total = Math.floor(Math.random() * 4) + 5;
       const remove = Math.floor(Math.random() * 3) + 1;
-      this.soals.push({ 
-        total, 
-        remove, 
-        answer: remove,
-        answered: false 
-      });
+       this.soals.push({ 
+         total, 
+         remove, 
+         answer: total - remove,
+         answered: false 
+       });
     }
   }
 
