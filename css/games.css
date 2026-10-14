@@ -145,3 +145,317 @@
   color: var(--color-secondary-text, #999);
   margin-top: 20px;
 }
+
+.vase-container {
+  width: 140px;
+  height: 160px;
+  border: 3px solid var(--color-secondary, #4ECDC4);
+  border-radius: 8px 8px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(78, 205, 196, 0.05));
+  transition: all 150ms ease-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.vase-container.drop-zone.drop-active {
+  background: rgba(78, 205, 196, 0.2);
+  border-color: var(--color-success, #95E1D3);
+  transform: scale(1.05);
+}
+
+.vase-visual {
+  font-size: 48px;
+  margin-bottom: 4px;
+}
+
+.flowers-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+  min-height: 40px;
+}
+
+.flower {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 150ms ease-out;
+}
+
+.flower:hover {
+  transform: scale(1.15);
+}
+
+.flower.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.flowers-count {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--color-text, #333);
+  margin-top: 4px;
+}
+
+.vase-container.complete {
+  background: rgba(144, 238, 144, 0.2);
+  border-color: var(--color-success, #95E1D3);
+  animation: pulse 400ms ease-out;
+}
+
+.matching-area {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.numbers-column,
+.objects-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.numbers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.number-button {
+  min-width: 60px;
+  height: 50px;
+  padding: 8px 16px;
+  border: 2px solid var(--color-primary, #FF6B6B);
+  border-radius: 8px;
+  background: var(--color-primary, #FF6B6B);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: grab;
+  user-select: none;
+  transition: all 150ms ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.number-button:hover {
+  transform: scale(1.05);
+}
+
+.number-button.dragging {
+  opacity: 0.6;
+  cursor: grabbing;
+}
+
+.number-button.matched {
+  background: var(--color-success, #95E1D3);
+  border-color: var(--color-success, #95E1D3);
+  cursor: default;
+  opacity: 0.7;
+}
+
+.objects-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.object-group {
+  min-width: 180px;
+  height: 50px;
+  padding: 8px;
+  border: 2px solid var(--color-secondary, #4ECDC4);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(78, 205, 196, 0.1);
+  transition: all 150ms ease-out;
+  position: relative;
+}
+
+.object-group.drop-active {
+  background: rgba(78, 205, 196, 0.3);
+  border-color: var(--color-success, #95E1D3);
+  transform: scale(1.02);
+}
+
+.object-group.matched {
+  background: rgba(144, 238, 144, 0.2);
+  border-color: var(--color-success, #95E1D3);
+}
+
+.object-group.shake {
+  animation: shake 300ms;
+}
+
+.objects-container {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.object-item {
+  font-size: 20px;
+}
+
+.puzzle-area {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.objects-area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stones-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  min-width: 120px;
+}
+
+.stone {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 150ms ease-out;
+  border-radius: 4px;
+}
+
+.stone:hover {
+  transform: scale(1.1);
+}
+
+.stone.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.plus-sign {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--color-text, #333);
+  margin: 0 8px;
+}
+
+.target-circle {
+  width: 140px;
+  height: 140px;
+  border: 3px solid var(--color-primary, #FF6B6B);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 107, 107, 0.1);
+  transition: all 150ms ease-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.target-circle.drop-zone.drop-active {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: var(--color-success, #95E1D3);
+  transform: scale(1.08);
+}
+
+.circle-visual {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.15);
+  border: 2px dashed var(--color-primary, #FF6B6B);
+}
+
+.stones-count {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color-text, #333);
+}
+
+.target-circle.complete {
+  background: rgba(144, 238, 144, 0.2);
+  border-color: var(--color-success, #95E1D3);
+  animation: pulse 400ms ease-out;
+}
+
+.answer-buttons-container {
+  margin-top: 20px;
+}
+
+.answer-buttons-grid {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.answer-button {
+  min-width: 60px;
+  padding: 12px 24px;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid var(--color-secondary, #4ECDC4);
+  border-radius: 8px;
+  background: var(--color-secondary, #4ECDC4);
+  color: white;
+  cursor: pointer;
+  transition: all 150ms ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.answer-button:hover {
+  transform: scale(1.05);
+}
+
+.answer-button:active {
+  transform: scale(0.98);
+}
+
+.answer-button.correct {
+  background: var(--color-success, #95E1D3);
+  border-color: var(--color-success, #95E1D3);
+  animation: pulse 400ms ease-out;
+}
+
+.answer-button.wrong {
+  background: var(--color-danger, #FF6B6B);
+  border-color: var(--color-danger, #FF6B6B);
+}
+
+.answer-buttons-grid.shake {
+  animation: shake 300ms;
+}

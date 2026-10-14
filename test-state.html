@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game State Test</title>
+</head>
+<body>
+  <h1>Game State Tests</h1>
+  <pre id="output"></pre>
+
+  <script src="js/state.js"></script>
+  <script>
+    const output = document.getElementById('output');
+    
+    async function runTests() {
+      try {
+        // Clear localStorage before tests
+        localStorage.clear();
+        
+        log('=== Test 1: Create game state, set name "Budi", save ===');
+        let state = GameState.load();
+        log('Initial state loaded:', JSON.stringify(state, null, 2));
+        
+        state.childName = 'Budi';
+        state.save();
+        log('Name set to "Budi" and saved');
+        
+        log('\n=== Test 2: Simulate page reload, verify name restored ===');
+        let state2 = GameState.load();
+        log('State reloaded. Name:', state2.childName);
+        if (state2.childName === 'Budi') {
+          log('✓ PASS: Name persisted across reload');
+        } else {
+          log('✗ FAIL: Name not persisted');
+        }
+        
+        log('\n=== Test 3: Update score to 50, verify Level 2 unlocked ===');
+        await state2.updateScore(50);
+        log('Score updated to 50');
+        log('Total score:', state2.totalScore);
+        log('Highest level:', state2.highestLevel);
+        
+        const unlocked50 = await state2.getUnlockedLevels();
+        log('Unlocked levels:', unlocked50);
+        if (unlocked50.includes(1) && unlocked50.includes(2)) {
+          log('✓ PASS: Levels 1 and 2 unlocked at score 50');
+        } else {
+          log('✗ FAIL: Expected levels 1,2 but got:', unlocked50);
+        }
+        
+        log('\n=== Test 4: Score 80, verify Level 3 unlocked ===');
+        await state2.updateScore(30);
+        log('Score updated by 30, total now:', state2.totalScore);
+        const unlocked80 = await state2.getUnlockedLevels();
+        log('Unlocked levels:', unlocked80);
+        if (unlocked80.includes(3)) {
+          log('✓ PASS: Level 3 unlocked at score 80');
+        }
+        
+        log('\n=== Test 5: Score 100, verify Level 4 unlocked ===');
+        await state2.updateScore(20);
+        log('Score updated by 20, total now:', state2.totalScore);
+        const unlocked100 = await state2.getUnlockedLevels();
+        log('Unlocked levels:', unlocked100);
+        if (unlocked100.includes(4)) {
+          log('✓ PASS: Level 4 unlocked at score 100');
+        }
+        
+        log('\n=== Test 6: Score 120, verify Level 5 unlocked ===');
+        await state2.updateScore(20);
+        log('Score updated by 20, total now:', state2.totalScore);
+        const unlocked120 = await state2.getUnlockedLevels();
+        log('Unlocked levels:', unlocked120);
+        if (unlocked120.includes(5)) {
+          log('✓ PASS: Level 5 unlocked at score 120');
+        }
+        
+        log('\n=== Test 7: Get level config ===');
+        const level2 = await state2.getLevelConfig(2);
+        log('Level 2 config:', JSON.stringify(level2, null, 2));
+        if (level2.name === 'Bunga ke Vas') {
+          log('✓ PASS: Level config loaded correctly');
+        }
+        
+        log('\n=== All tests completed ===');
+        
+      } catch (e) {
+        log('ERROR:', e.message);
+        log(e.stack);
+      }
+    }
+    
+    function log(msg, data) {
+      const text = data ? msg + '\n' + data : msg;
+      output.textContent += text + '\n';
+      console.log(msg, data);
+    }
+    
+    runTests();
+  </script>
+</body>
+</html>
