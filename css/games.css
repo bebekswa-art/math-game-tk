@@ -42,25 +42,27 @@
 
 .game-area {
   display: flex;
-  gap: 60px;
-  align-items: flex-start;
+  gap: 30px;
+  align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 600px;
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 
 .objects-area {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
+  align-items: center;
 }
 
 .apple-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 15px;
   justify-content: center;
-  min-width: 180px;
+  min-width: auto;
 }
 
 .apple {
