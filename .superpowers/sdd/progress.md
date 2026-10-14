@@ -71,4 +71,25 @@
 - Fix round 1/1: 3 findings (getElementById, opacity, basket size) — ALL ADDRESSED
 - Verdict: Review clean after fix
 
+### Task 7: Games 2-4 (Bunga, Matching, Puzzle)
+- Status: complete
+- Commits: 34ddd1d (main) → b223417 (fix Game 2 answer calc)
+- Fix round 1/1: Game 2 answer = total - remove — ADDRESSED
+- Verdict: Review clean after fix
+
+### Task 8: Game 5 (Challenge Mode) & Game Launcher
+- Status: complete
+- Commit: c60c9f8
+- Verdict: Review clean (spec ✅, quality ✅)
+
+### Task 9: Audio Manager & Sound Effects
+- Status: complete
+- Commit: aec45ac
+- Verdict: Review clean
+
+### Task 10: Asset Placeholders & Visual Polish
+- Status: complete
+- Commit: e6a6d2d
+- Verdict: Review clean
+
 

@@ -1,5 +1,6 @@
 const DragEngine = (() => {
   let draggedElement = null;
+  let touchIdentifier = null;
   const dropZones = [];
   const dropCallbacks = [];
 
@@ -70,6 +71,71 @@ const DragEngine = (() => {
     draggedElement = null;
   }
 
+  function handleTouchStart(e) {
+    const touch = e.touches[0];
+    touchIdentifier = touch.identifier;
+    draggedElement = e.target;
+    
+    draggedElement.classList.add('dragging');
+  }
+
+  function handleTouchMove(e) {
+    if (!draggedElement || !touchIdentifier) return;
+    
+    e.preventDefault();
+    const touch = Array.from(e.touches).find(t => t.identifier === touchIdentifier);
+    if (!touch) return;
+
+    const touchX = touch.clientX;
+    const touchY = touch.clientY;
+    const elementAtTouch = document.elementFromPoint(touchX, touchY);
+
+    dropZones.forEach(zone => {
+      if (elementAtTouch === zone || zone.contains(elementAtTouch)) {
+        zone.classList.add('drop-active');
+      } else {
+        zone.classList.remove('drop-active');
+      }
+    });
+  }
+
+  function handleTouchEnd(e) {
+    if (!draggedElement) return;
+
+    const touch = Array.from(e.changedTouches).find(t => t.identifier === touchIdentifier);
+    if (!touch) return;
+
+    const touchX = touch.clientX;
+    const touchY = touch.clientY;
+    const elementAtTouch = document.elementFromPoint(touchX, touchY);
+
+    let targetZone = null;
+    for (const zone of dropZones) {
+      if (elementAtTouch === zone || zone.contains(elementAtTouch)) {
+        targetZone = zone;
+        break;
+      }
+    }
+
+    if (targetZone) {
+      const dragData = {
+        source: draggedElement,
+        target: targetZone,
+        data: {
+          id: draggedElement.getAttribute('data-drag-id'),
+          type: draggedElement.getAttribute('data-drag-type')
+        }
+      };
+      
+      dropCallbacks.forEach(callback => callback(dragData));
+    }
+
+    draggedElement.classList.remove('dragging');
+    dropZones.forEach(zone => zone.classList.remove('drop-active'));
+    draggedElement = null;
+    touchIdentifier = null;
+  }
+
   return {
     init() {
       document.addEventListener('dragstart', handleDragStart, true);
@@ -77,11 +143,16 @@ const DragEngine = (() => {
       document.addEventListener('dragleave', handleDragLeave, true);
       document.addEventListener('drop', handleDrop, true);
       document.addEventListener('dragend', handleDragEnd, true);
+      
+      document.addEventListener('touchstart', handleTouchStart, true);
+      document.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+      document.addEventListener('touchend', handleTouchEnd, true);
     },
 
     setDragData(element, data) {
       element.setAttribute('draggable', 'true');
       element.classList.add('draggable');
+      element.setAttribute('touch-action', 'none');
       
       if (data.id) {
         element.setAttribute('data-drag-id', data.id);
@@ -115,3 +186,4 @@ const DragEngine = (() => {
     }
   };
 })();
+
