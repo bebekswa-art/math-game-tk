@@ -3,6 +3,7 @@ class Game1Hitung extends BaseGame {
     super(levelId);
     this.gameType = 'hitung';
     this.applesInBasket = 0;
+    this.droppedAppleIds = new Set();
   }
 
   async generateSoals() {
@@ -49,7 +50,7 @@ class Game1Hitung extends BaseGame {
   renderApples(count, group) {
     let html = '';
     for (let i = 0; i < count; i++) {
-      html += `<div class="apple draggable" data-group="${group}" data-index="${i}" draggable="true">🍎</div>`;
+      html += `<div class="apple draggable" data-group="${group}" data-index="${i}" data-id={`apple-${group}-${i}`} draggable="true">🍎</div>`;
     }
     return html;
   }
@@ -73,6 +74,10 @@ class Game1Hitung extends BaseGame {
   }
 
   async handleAppleDrop(source, basket, soal) {
+    const appleId = source.getAttribute('data-id');
+    if (this.droppedAppleIds.has(appleId)) return;
+    this.droppedAppleIds.add(appleId);
+    
     this.applesInBasket++;
     const countDisplay = basket.querySelector('.basket-count');
     countDisplay.textContent = `${this.applesInBasket}/${soal.answer}`;
