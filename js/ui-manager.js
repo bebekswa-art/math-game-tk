@@ -188,7 +188,7 @@ const UIManager = (() => {
 
       if (soundBtn) {
         soundBtn.addEventListener('click', () => {
-          // Toggle sound
+          AudioManager.toggleMute();
         });
       }
     } else if (screenName === 'results') {
