@@ -1,120 +1,86 @@
 window.GameApp = {
-  state: {
-    currentScreen: null,
-    currentLevel: null,
-    totalScore: 0,
-    levels: []
-  },
+  state: null,
 
   async init() {
     try {
+      this.state = GameState.load();
       const response = await fetch('data/levels.json');
-      this.state.levels = (await response.json()).levels;
-      this.showScreen('home');
+      const levelsData = await response.json();
+      
+      this.state.levels = levelsData.levels;
+      this.state.levelScores = this.state.levelScores || {};
+      
+      this.showScreen('title');
     } catch (error) {
       console.error('Failed to initialize GameApp:', error);
     }
   },
 
   showScreen(name) {
-    this.state.currentScreen = name;
-    const container = document.getElementById('app-container');
-    
-    if (!container) {
-      console.error('App container not found');
+    if (!this.state) {
+      console.error('GameApp state not initialized');
       return;
     }
 
-    switch (name) {
-      case 'home':
-        this._renderHomeScreen();
-        break;
-      case 'levels':
-        this._renderLevelsScreen();
-        break;
-      case 'game':
-        this._renderGameScreen();
-        break;
-      case 'results':
-        this._renderResultsScreen();
-        break;
-      default:
-        console.warn(`Unknown screen: ${name}`);
-    }
+    this.state.currentScreen = name;
+    UIManager.render(name, this.state);
   },
 
-  startGame(level) {
-    this.state.currentLevel = level;
+  startGame(levelId) {
+    if (!this.state) return;
+    
+    this.state.currentLevel = levelId;
+    this.state.currentGameState = {
+      soalIndex: 0,
+      score: 0,
+      streak: 0,
+      accuracy: 0,
+      answers: [],
+      lastResult: null
+    };
     this.showScreen('game');
   },
 
-  _renderHomeScreen() {
-    const container = document.getElementById('app-container');
-    container.innerHTML = `
-      <div class="screen screen-home">
-        <h1>Permainan Matematika TK</h1>
-        <p>Belajar berhitung dengan menyenangkan!</p>
-        <button class="btn btn-primary btn-large" onclick="window.GameApp.showScreen('levels')">
-          Mulai Permainan
-        </button>
-      </div>
-    `;
-  },
-
-  _renderLevelsScreen() {
-    const container = document.getElementById('app-container');
-    const levelsHtml = this.state.levels.map(level => `
-      <div class="level-card">
-        <h3>${level.name}</h3>
-        <p>Kesulitan: ${level.difficulty}</p>
-        <button class="btn btn-secondary" onclick="window.GameApp.startGame(${level.id})">
-          Mainkan
-        </button>
-      </div>
-    `).join('');
-
-    container.innerHTML = `
-      <div class="screen screen-levels">
-        <h1>Pilih Level</h1>
-        <div class="levels-grid">
-          ${levelsHtml}
-        </div>
-        <button class="btn btn-primary" onclick="window.GameApp.showScreen('home')">
-          Kembali
-        </button>
-      </div>
-    `;
-  },
-
-  _renderGameScreen() {
-    const container = document.getElementById('app-container');
+  nextQuestion() {
+    if (!this.state || !this.state.currentGameState) return;
+    
     const level = this.state.levels.find(l => l.id === this.state.currentLevel);
+    if (!level) return;
 
-    container.innerHTML = `
-      <div class="screen screen-game">
-        <h2>${level.name}</h2>
-        <p>Level: ${level.id}</p>
-        <div id="game-content">
-          <!-- Game content will be rendered here by specific game modules -->
-        </div>
-        <button class="btn btn-secondary" onclick="window.GameApp.showScreen('levels')">
-          Kembali
-        </button>
-      </div>
-    `;
+    this.state.currentGameState.soalIndex++;
+    
+    if (this.state.currentGameState.soalIndex >= level.soalCount) {
+      this.completeLevel();
+    } else {
+      this.showScreen('game');
+    }
   },
 
-  _renderResultsScreen() {
-    const container = document.getElementById('app-container');
-    container.innerHTML = `
-      <div class="screen screen-results">
-        <h1>Selesai!</h1>
-        <p>Total Skor: ${this.state.totalScore}</p>
-        <button class="btn btn-primary btn-large" onclick="window.GameApp.showScreen('home')">
-          Kembali ke Beranda
-        </button>
-      </div>
-    `;
+  nextLevel() {
+    if (!this.state) return;
+    
+    const currentLevelId = this.state.currentLevel;
+    const nextLevelId = currentLevelId + 1;
+    
+    if (nextLevelId <= 5) {
+      this.startGame(nextLevelId);
+    } else {
+      this.showScreen('title');
+    }
+  },
+
+  completeLevel() {
+    if (!this.state) return;
+    
+    const levelId = this.state.currentLevel;
+    const levelScore = this.state.currentGameState?.score || 0;
+    
+    if (!this.state.levelScores) {
+      this.state.levelScores = {};
+    }
+    this.state.levelScores[levelId] = levelScore;
+    
+    this.state.updateScore?.(levelScore);
   }
 };
 
