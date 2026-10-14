@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag-and-Drop Engine Test</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/games.css">
+  <style>
+    body {
+      padding: 40px;
+    }
+    .test-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .test-item {
+      background-color: var(--color-primary);
+      color: white;
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: var(--border-radius-md);
+      text-align: center;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    .test-drop-zone {
+      background-color: #f0f0f0;
+      border: 2px solid var(--color-border);
+      min-height: 150px;
+      border-radius: var(--border-radius-md);
+      padding: 20px;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-light);
+      font-size: var(--font-size-lg);
+    }
+    .test-log {
+      background-color: #f5f5f5;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius-md);
+      padding: 15px;
+      margin-top: 20px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: var(--font-size-sm);
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      background-color: white;
+      border-left: 3px solid var(--color-primary);
+      padding-left: 10px;
+    }
+    .reset-btn {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Drag-and-Drop Engine Test</h1>
+    
+    <h2>Draggable Items</h2>
+    <div id="draggable-items">
+      <div class="test-item" data-test-id="item-1">Item 1</div>
+      <div class="test-item" data-test-id="item-2">Item 2</div>
+      <div class="test-item" data-test-id="item-3">Item 3</div>
+    </div>
+
+    <h2>Drop Zone</h2>
+    <div id="drop-zone-1" class="test-drop-zone">
+      Drop items here
+    </div>
+
+    <h2>Test Log</h2>
+    <div class="test-log" id="test-log">
+      <div class="log-entry">Waiting for events...</div>
+    </div>
+
+    <button class="btn btn-secondary reset-btn" onclick="resetTest()">Reset Test</button>
+  </div>
+
+  <script src="js/drag-engine.js"></script>
+  <script>
+    const testLog = document.getElementById('test-log');
+    const draggableItems = document.querySelectorAll('.test-item');
+    const dropZone = document.getElementById('drop-zone-1');
+
+    function addLog(message) {
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      const timestamp = new Date().toLocaleTimeString();
+      entry.textContent = `[${timestamp}] ${message}`;
+      testLog.appendChild(entry);
+      testLog.scrollTop = testLog.scrollHeight;
+    }
+
+    function resetTest() {
+      testLog.innerHTML = '<div class="log-entry">Test reset. Ready to drag items.</div>';
+      draggableItems.forEach((item, index) => {
+        if (!item.parentElement.id || item.parentElement.id === 'draggable-items') {
+          document.getElementById('draggable-items').appendChild(item);
+        }
+      });
+      addLog('Test reset complete');
+    }
+
+    draggableItems.forEach((item, index) => {
+      DragEngine.setDragData(item, {
+        id: `item-${index + 1}`,
+        type: 'test-item'
+      });
+    });
+
+    DragEngine.setDropZone(dropZone, (dragData) => {
+      addLog(`DROP: ${dragData.data.id} → drop zone`);
+      dropZone.appendChild(dragData.source);
+    });
+
+    DragEngine.onDrop((dragData) => {
+      addLog(`EVENT: Drag complete - ${dragData.data.id} (type: ${dragData.data.type})`);
+    });
+
+    DragEngine.init();
+    addLog('Drag-and-Drop Engine initialized');
+    addLog('Try dragging items to the drop zone');
+  </script>
+</body>
+</html>

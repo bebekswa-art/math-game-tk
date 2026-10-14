@@ -1,0 +1,24 @@
+.draggable {
+  cursor: grab;
+  user-select: none;
+  transition: opacity var(--transition-fast);
+}
+
+.draggable:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  opacity: 0.6;
+  cursor: grabbing;
+}
+
+.drop-zone {
+  position: relative;
+  transition: background-color var(--transition-fast), border var(--transition-fast);
+}
+
+.drop-zone.drop-active {
+  background-color: rgba(144, 238, 144, 0.3);
+  border: 2px dashed var(--color-success);
+}
