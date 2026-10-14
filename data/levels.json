@@ -1,0 +1,60 @@
+{
+  "levels": [
+    {
+      "id": 1,
+      "name": "Hitung & Kumpul",
+      "game": "hitung",
+      "difficulty": "easy",
+      "unlockThreshold": 0,
+      "soalCount": 5,
+      "params": {
+        "maxSum": 5
+      }
+    },
+    {
+      "id": 2,
+      "name": "Bunga ke Vas",
+      "game": "bunga",
+      "difficulty": "easy",
+      "unlockThreshold": 50,
+      "soalCount": 5,
+      "params": {
+        "maxTotal": 5,
+        "maxRemove": 2
+      }
+    },
+    {
+      "id": 3,
+      "name": "Matching Angka",
+      "game": "matching",
+      "difficulty": "medium",
+      "unlockThreshold": 80,
+      "soalCount": 5,
+      "params": {
+        "maxNumber": 6
+      }
+    },
+    {
+      "id": 4,
+      "name": "Puzzle Penjumlahan",
+      "game": "puzzle",
+      "difficulty": "medium",
+      "unlockThreshold": 100,
+      "soalCount": 5,
+      "params": {
+        "maxSum": 10
+      }
+    },
+    {
+      "id": 5,
+      "name": "Challenge Mode",
+      "game": "challenge",
+      "difficulty": "hard",
+      "unlockThreshold": 120,
+      "soalCount": 5,
+      "params": {
+        "maxOperand": 10
+      }
+    }
+  ]
+}
