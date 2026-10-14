@@ -32,6 +32,17 @@ window.GameApp = {
     }
   },
 
+  getGameClass(gameType) {
+    const games = {
+      'hitung': Game1Hitung,
+      'bunga': Game2Bunga,
+      'matching': Game3Matching,
+      'puzzle': Game4Puzzle,
+      'challenge': Game5Challenge
+    };
+    return games[gameType];
+  },
+
   async initializeGame() {
     if (!this.state || !this.state.currentLevel) return;
 
@@ -41,30 +52,16 @@ window.GameApp = {
     const gameArea = document.getElementById('game-area');
     if (!gameArea) return;
 
-    let GameClass = null;
-    switch (level.game) {
-      case 'hitung':
-        GameClass = Game1Hitung;
-        break;
-      case 'bunga':
-        GameClass = Game2Bunga;
-        break;
-      case 'matching':
-        GameClass = Game3Matching;
-        break;
-      case 'puzzle':
-        GameClass = Game4Puzzle;
-        break;
-      case 'challenge':
-        GameClass = Game5Challenge;
-        break;
-      default:
-        console.error('Unknown game type:', level.game);
-        return;
+    const GameClass = this.getGameClass(level.game);
+    if (!GameClass) {
+      console.error(`No game class for type: ${level.game}`);
+      return;
     }
 
     this.currentGame = new GameClass(level.id);
     await this.currentGame.init(gameArea, level);
+    DragEngine.init();
+    AudioManager.init();
     await this.currentGame.start();
   },
 
